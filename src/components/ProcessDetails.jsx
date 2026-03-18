@@ -1,3 +1,4 @@
+import API_BASE from '../config.js';
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FileText, Video, Database, ChevronUp, ChevronDown, Check, Maximize2, Loader2, Star, MonitorPlay, Image as ImageIcon, Table as TableIcon, Send, X, Trash2, ArrowLeft, MoreHorizontal, Minimize2, Bold, Italic, Underline, AlignLeft, List, Link, Asterisk, Presentation, ArrowUp, ArrowDown, Activity, ExternalLink, Search, Minus, Plus as PlusIcon, RotateCw, Download, Printer, Pin, Menu, Filter, Sliders, Layout, LayoutGrid } from 'lucide-react';
@@ -26,7 +27,7 @@ const VideoViewer = ({ artifact, onClose }) => {
                     {artifact.videoPath ? (
                         artifact.videoPath.endsWith('.webp') || artifact.videoPath.endsWith('.png') || artifact.videoPath.endsWith('.jpg') ? (
                             <img
-                                src={`${import.meta.env.VITE_API_URL || ''}${artifact.videoPath}`}
+                                src={`${API_BASE}${artifact.videoPath}`}
                                 alt={artifact.label}
                                 className="w-full h-full object-contain"
                             />
@@ -35,7 +36,7 @@ const VideoViewer = ({ artifact, onClose }) => {
                                 controls
                                 autoPlay
                                 className="w-full h-full"
-                                src={`${import.meta.env.VITE_API_URL || ''}${artifact.videoPath}`}
+                                src={`${API_BASE}${artifact.videoPath}`}
                             >
                                 Your browser does not support the video tag.
                             </video>
@@ -158,7 +159,7 @@ const DocumentViewer = ({ artifact, onClose }) => {
                     >
                         {artifact.pdfPath ? (
                             <iframe
-                                src={`${import.meta.env.VITE_API_URL || ''}${artifact.pdfPath}#toolbar=0&view=FitH&page=${activePage}`}
+                                src={`${API_BASE}${artifact.pdfPath}#toolbar=0&view=FitH&page=${activePage}`}
                                 className="w-full h-full border-none"
                                 title={artifact.label}
                                 key={`${artifact.id}-${activePage}`}
@@ -381,7 +382,7 @@ const EmailDraftViewer = ({ artifact, onClose }) => {
                 return;
             }
 
-            await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/email-status`, {
+            await fetch(`${API_BASE}/email-status`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ sent: true })
@@ -530,7 +531,7 @@ const DecisionViewer = ({ artifact, onClose }) => {
         if (!selectedOption) return;
         setSending(true);
         try {
-            const endpoint = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/signal`;
+            const endpoint = `${API_BASE}/signal`;
             await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -919,7 +920,7 @@ const ProcessDetails = () => {
             if (isSimulating) return;
 
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/data/process_${id}.json`);
+                const response = await fetch(`${API_BASE}/data/process_${id}.json`);
                 if (!response.ok) {
                     throw new Error('Process data not found');
                 }
@@ -1016,7 +1017,7 @@ const ProcessDetails = () => {
             const localSavedStatus = sessionStorage.getItem(`case_status_${id}`);
             if (isSimulating || localSavedStatus === 'Done') return; // SKIP updates during simulation or if "Done"
             try {
-                const response = await fetch('/data/processes.json');
+                const response = await fetch(`${API_BASE}/data/processes.json`);
                 if (response.ok) {
                     const processes = await response.json();
                     setAllProcesses(processes);
@@ -1308,7 +1309,7 @@ const ProcessDetails = () => {
                                                                             btn.disabled = true;
 
                                                                             try {
-                                                                                await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/signal`, {
+                                                                                await fetch(`${API_BASE}/signal`, {
                                                                                     method: 'POST',
                                                                                     headers: { 'Content-Type': 'application/json' },
                                                                                     body: JSON.stringify({ signal: option.signal || option.action || option.id })
@@ -1393,7 +1394,7 @@ const ProcessDetails = () => {
                                 </div>
                                 <div className="flex-1 overflow-auto p-8 flex items-center justify-center bg-gray-50">
                                     <img
-                                        src={`${import.meta.env.VITE_API_URL || ''}${selectedArtifact.imagePath}`}
+                                        src={`${API_BASE}${selectedArtifact.imagePath}`}
                                         className="max-w-full max-h-full rounded shadow-lg border border-gray-200"
                                         alt={selectedArtifact.label}
                                     />
