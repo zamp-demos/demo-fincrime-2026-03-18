@@ -1,0 +1,105 @@
+CASE_ID: CUST-20847-JO
+CASE_NAME: James Okafor — Silent Exit Detection
+KEY_DETAILS:
+  Customer: James Okafor
+  Account: ****8821
+  Employer: Apex Logistics Ltd
+  Total Exposure: £53,000
+  Alert Type: Silent Exit — 9 Markers Active
+  LRS Score: 847 / 1000
+  Days to Exit: ~14 days (High confidence)
+
+STEP 1 [3s]
+processing: Ingesting customer profile and transaction history...
+done: Customer profile loaded — CUST-20847-JO, 107-day-old account
+reasoning:
+  - Account opened 2025-12-01, onboarded clean — KYC score 94, no PEP/sanctions match
+  - Products: Current Account, £45K Personal Loan, £8K Credit Card — total exposure £53,000
+  - Employer: Apex Logistics Ltd — income consistent with onboarding declaration
+  - LRS score at onboarding: 112. Current LRS score: 847 — escalating trajectory flagged
+artifact: table | Customer Profile | id:tbl-jo-001
+  Name: James Okafor
+  Account: ****8821
+  Onboarded: 2025-12-01
+  KYC Score: 94 — PASS
+  Employer: Apex Logistics Ltd
+  Total Exposure: £53,000
+  LRS Score: 847 / 1000
+artifact: pdf | Customer Risk Profile | id:pdf-jo-001 | path:/files/CUST-20847-JO_customer_profile.pdf
+
+STEP 2 [4s]
+processing: Running Silent Exit marker analysis across 12-point framework...
+done: 9 of 12 Silent Exit markers active — ALERT THRESHOLD EXCEEDED
+reasoning:
+  - (R) Velocity Spike: Transaction frequency up 340% vs 90-day average
+  - (R) Channel Shift: 80% digital → 100% ATM/cash in 18 days
+  - (R) New Counterparty Surge: 4 unrecognised payees added in 7-day window
+  - (R) Progressive Drawdown: Account balance down 62% in 28 days
+  - (R) Device Anomaly: New device registered Feb 14 — location: Eastern Europe
+  - (R) Loan Acceleration: Full £45K drawdown in 60 days vs bank average of 180 days
+  - (R) Communication Silence: No response to 3 bank communications since Mar 1
+  - (R) Geographic Inconsistency: Transactions across London, Manchester, Birmingham, Leeds, Glasgow
+  - (R) Peer Network Activity: 2 connected accounts showing identical patterns — CUST-00912, CUST-01034
+  - (G) Document Avoidance: No evidence
+  - (G) Dormancy Flip: Not applicable
+  - (G) Support Escalation: Not applicable
+artifact: table | Silent Exit Markers | id:tbl-jo-002
+  Active Markers: 9 / 12
+  Threshold: 4 markers triggers alert
+  Exceeds Threshold By: 5 markers
+  Highest Risk: Loan Acceleration + Geographic Inconsistency
+  Network Exposure: CUST-00912, CUST-01034 (same pattern)
+
+STEP 3 [3s]
+processing: Analysing transaction velocity and loan drawdown timeline...
+done: Anomalous drawdown confirmed — 60-day vs 180-day norm
+reasoning:
+  - £45,000 personal loan drawn in 60 days vs bank average of 180 days
+  - 12 transactions in last 30 days — 3.4x above historical average of 3.5/month
+  - ATM withdrawals across 5 cities in 14 days: London, Manchester, Birmingham, Leeds, Glasgow
+  - £8,400 transfer to ACC-NEW-004 (new, unrecognised payee) on Mar 8
+  - Remaining balance: £4,200 — down from £19,800 30 days ago
+artifact: table | Transaction Summary | id:tbl-jo-003
+  Transactions (30d): 12 (vs avg 3.5/month)
+  ATM Withdrawals: £8,800 across 5 cities
+  Transfers to New Payees: £20,700 to 4 unrecognised accounts
+  Loan Drawdown Rate: 60 days (norm: 180 days)
+  Balance Change: £19,800 → £4,200 (-79%)
+
+STEP 4 [hitl: APPROVE_BLOCK_JO]
+processing: Preparing recommendation for compliance review...
+done: Compliance review required — suspected Silent Exit in progress
+hitl: Risk score 847, 9 active markers, ~14 days to estimated exit. What action should be taken?
+options:
+  - Freeze account & initiate SAR | freeze | signal:APPROVE_BLOCK_JO
+  - Escalate to Senior FinCrime Manager | escalate | signal:ESCALATE_JO
+  - Issue formal customer contact notice | contact | signal:CONTACT_JO
+reasoning:
+  - (R) Silent Exit pattern confirmed — 9/12 markers active, exceeds 4-marker threshold by 125%
+  - (R) Estimated 14 days until full account drain — HIGH confidence rating
+  - (R) Peer network activity suggests coordinated fraud ring — CUST-00912, CUST-01034 also flagged
+  - Recommended action: Account freeze + SAR submission within 24 hours
+
+STEP 5 [2s]
+processing: Logging decision and generating SAR pre-fill document...
+done: Decision recorded — account flagged for immediate action
+reasoning:
+  - Compliance decision logged to audit trail with timestamp
+  - SAR pre-fill generated — ready for submission to National Crime Agency
+  - Peer accounts CUST-00912 and CUST-01034 flagged for parallel review
+  - Customer contact suspended pending investigation (POCA 2002 — tipping off prevention)
+artifact: table | Action Summary | id:tbl-jo-004
+  Decision: Account Freeze + SAR Submission
+  SAR Reference: SAR-2026-03-0847
+  NCA Submission Window: 7 days
+  Peer Accounts Flagged: CUST-00912, CUST-01034
+  Investigating Officer: FinCrime Team Alpha
+
+STEP 6 [final]
+processing: Closing investigation record...
+done: Investigation complete — account frozen, SAR submitted
+reasoning:
+  - Account CUST-20847-JO frozen at 14:22 GMT 2026-03-18
+  - SAR SAR-2026-03-0847 submitted to National Crime Agency
+  - Estimated loss prevented: £48,800 (remaining exposure at time of freeze)
+  - Case closed — awaiting NCA response within 7 working days

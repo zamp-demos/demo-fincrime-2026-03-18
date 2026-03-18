@@ -1,0 +1,103 @@
+CASE_ID: CUST-44891-MW
+CASE_NAME: Marcus Webb — Insider Trading Detection
+KEY_DETAILS:
+  Customer: Marcus Webb
+  Account: ****9903
+  Employer: Meridian Capital Partners (VP, Equities)
+  Total Exposure: £890,000
+  Alert Type: Insider Trading — 6 Correlated Pre-announcement Trades
+  LRS Score: 743 / 1000
+  Pattern: MAR — Market Abuse, Insider Dealing
+
+STEP 1 [3s]
+processing: Ingesting customer profile and investment portfolio history...
+done: Customer profile loaded — CUST-44891-MW, 1,469-day-old premium account
+reasoning:
+  - Account opened 2022-03-10. VP at Meridian Capital Partners — equities desk
+  - Products: Premium Current Account, £890K Investment Portfolio, ISA
+  - KYC score 91 — passed. PEP/sanctions clear
+  - LRS trajectory: 104 → 743 over 4 years — gradual escalation, 6 trade clusters identified
+artifact: table | Customer Profile | id:tbl-mw-001
+  Name: Marcus Webb
+  Account: ****9903
+  Onboarded: 2022-03-10
+  KYC Score: 91 — PASS
+  Employer: Meridian Capital Partners — VP Equities
+  Total Exposure: £890,000
+  LRS Score: 743 / 1000
+artifact: pdf | Customer Risk Profile | id:pdf-mw-001 | path:/files/CUST-44891-MW_customer_profile.pdf
+
+STEP 2 [5s]
+processing: Correlating equity trades against corporate announcement timeline...
+done: 6 pre-announcement trade clusters confirmed — pattern spans 26 months
+reasoning:
+  - (R) TechCorp PLC: £47K buy 3 days before M&A announcement → £61.2K sale post-announcement → £14,200 gain
+  - (R) PharmaCo Ltd: £38K buy 2 days before FDA approval leak → £52.4K sale → £14,400 gain
+  - (R) EnergyGrid UK: £55K buy placed day before earnings call — position open
+  - (R) 3 prior clusters in 2024–2025 follow same pre/post-announcement pattern
+  - (R) Webb Family Trust receives post-trade transfers: £14K (Feb 19), £13.5K (Mar 3)
+  - (R) Transfer counterparty (Webb Family Trust) linked to Meridian Capital compliance officer
+  - Total confirmed gains from 5 completed trades: ~£89,400
+artifact: table | Trade Correlation Analysis | id:tbl-mw-002
+  Pre-announcement Trade Clusters: 6
+  Confirmed Gains: ~£89,400
+  Average Days Before Announcement: 2.7 days
+  Open Position: EnergyGrid UK — £55,000
+  Trust Transfers Post-trade: £27,500 total
+  Insider Network Link: Webb Family Trust → Meridian Compliance Officer
+
+STEP 3 [3s]
+processing: Cross-referencing against MAR/FCA insider list and market announcements...
+done: MAR breach indicators confirmed — pattern consistent with systematic insider dealing
+reasoning:
+  - All 6 trade clusters fall within MAR 2-7 day pre-announcement window
+  - Probability of 6 coincidental trades in this window: less than 0.01% by random chance
+  - FCA watchlist proximity flag raised in Nov 2024 — sector-level flag
+  - Trust beneficiary connected to Meridian compliance officer — potential information conduit
+  - Current open EnergyGrid position (£55K) suggests insider information may be live
+artifact: table | MAR Assessment | id:tbl-mw-003
+  Regulation: UK MAR — Market Abuse Regulation
+  Breach Type: Insider Dealing — Section 52 CJA 1993
+  Probability of Coincidence: < 0.01%
+  FCA Watchlist: Proximity flag — Nov 2024
+  Open Position Risk: £55,000 EnergyGrid — earnings call imminent
+  Reporting Body: Financial Conduct Authority
+
+STEP 4 [hitl: APPROVE_FCA_MW]
+processing: Preparing FCA suspicious transaction report (STR) recommendation...
+done: FCA referral required — systematic insider dealing pattern confirmed
+hitl: 6-trade insider dealing pattern confirmed. £55K live position. What action?
+options:
+  - File STR with FCA & freeze open position | str | signal:APPROVE_FCA_MW
+  - Freeze account & escalate to Senior Compliance | freeze | signal:FREEZE_MW
+  - Issue internal investigation notice | internal | signal:INTERNAL_MW
+reasoning:
+  - (R) 6-trade pattern over 26 months — systematic, not opportunistic
+  - (R) Open EnergyGrid position (£55K) — earnings call imminent, potential further gain
+  - (R) Trust connection to Meridian compliance officer — possible broader internal breach
+  - FCA STR required under UK MAR Article 16 — 24-hour window from detection
+
+STEP 5 [2s]
+processing: Filing FCA Suspicious Transaction Report and freezing open position...
+done: STR filed with FCA — EnergyGrid position frozen pending investigation
+reasoning:
+  - STR submitted to FCA under UK MAR Article 16 within 24-hour mandatory window
+  - EnergyGrid UK position (£55K) frozen — no further trades permitted
+  - Internal investigation notice issued to Meridian Capital Partners compliance team
+  - Webb Family Trust flagged for beneficial ownership review
+  - FCA acknowledgement reference issued
+artifact: table | Action Summary | id:tbl-mw-004
+  STR Reference: STR-FCA-2026-0743
+  Open Position: EnergyGrid £55K — Frozen
+  FCA Acknowledgement: Pending (24h)
+  Internal Investigation: Meridian Capital Compliance
+  Trust Review: Webb Family Trust — beneficial ownership
+
+STEP 6 [final]
+processing: Closing investigation record...
+done: Investigation complete — STR filed, position frozen, FCA engaged
+reasoning:
+  - STR STR-FCA-2026-0743 filed with Financial Conduct Authority
+  - EnergyGrid position frozen — estimated £55K protected from further abuse
+  - Meridian Capital Partners notified via internal compliance channel
+  - FCA will determine if formal investigation warranted — outcome in 10-20 working days

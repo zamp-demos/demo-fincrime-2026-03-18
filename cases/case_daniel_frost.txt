@@ -1,0 +1,106 @@
+CASE_ID: CUST-67103-DF
+CASE_NAME: Daniel Frost — Account Takeover
+KEY_DETAILS:
+  Customer: Daniel Frost
+  Account: ****5534
+  Employer: NHS Digital (IT Contractor)
+  Total Exposure: £7,000
+  Alert Type: Account Takeover — ATO Already in Execution
+  LRS Score: 691 / 1000
+  Days to Exit: 0 — ATO in progress
+
+STEP 1 [2s]
+processing: Ingesting customer profile and account access log...
+done: Customer profile loaded — CUST-67103-DF, ATO detected in active execution
+reasoning:
+  - Account opened 2023-11-20. NHS Digital IT contractor — low exposure, £7,000 total
+  - Products: Current Account, £2K Overdraft, £5K Credit Card
+  - KYC score 95 — clean profile, low-risk individual historically
+  - ATO trajectory: legitimate account compromised since Feb 2026 — customer confirmed no knowledge
+artifact: table | Customer Profile | id:tbl-df-001
+  Name: Daniel Frost
+  Account: ****5534
+  Onboarded: 2023-11-20
+  KYC Score: 95 — PASS
+  Employer: NHS Digital — IT Contractor
+  Total Exposure: £7,000
+  LRS Score: 691 / 1000
+artifact: pdf | Customer Risk Profile | id:pdf-df-001 | path:/files/CUST-67103-DF_customer_profile.pdf
+
+STEP 2 [4s]
+processing: Reconstructing ATO attack chain from access and transaction logs...
+done: Full ATO attack chain reconstructed — 3 new device IDs, 1 mule account
+reasoning:
+  - (R) Feb 16: Login from Bucharest, Romania — customer unaware
+  - (R) Feb 17: Address change submitted via mobile — customer confirmed they did NOT initiate this
+  - (R) Feb 18: New payee MULE-ACC-8821 added from new device ID (3rd unregistered device)
+  - (R) Feb 19: Near-full balance transferred to MULE-ACC-8821 (£1,800)
+  - (R) Feb 20: Full £2,000 overdraft drawn and immediately transferred to MULE-ACC-8821 (£1,850)
+  - (R) Feb 22: £4,800 credit card purchase — delivery address changed mid-transaction
+  - (R) Mar 1: Simultaneous logins — UK and Romania within 3-minute window (physically impossible)
+  - (R) Mar 10: £980 cash advance from ATM in Eastern Europe
+  - (G) Customer called to dispute — confirmed ATO in progress, all transactions fraudulent
+artifact: table | ATO Attack Chain | id:tbl-df-002
+  Attack Vector: Credential compromise + device registration
+  New Device IDs: 3 unregistered devices in 30 days
+  Mule Account: MULE-ACC-8821 (received £3,650)
+  Credit Card Abuse: £4,800 purchase, delivery address altered
+  Cash Advance Abroad: £980 — Eastern Europe ATM
+  Customer Confirmation: All transactions disputed
+
+STEP 3 [3s]
+processing: Tracing mule account network — MULE-ACC-8821 cross-reference...
+done: Mule account linked to 6 other ATO victims this month — organised crime ring
+reasoning:
+  - MULE-ACC-8821 is a known mule account — already flagged by FinCrime monitoring
+  - 6 other ATO victims this month transferred funds to same mule account
+  - Pattern: Credential theft (likely phishing) → device registration → full account drain
+  - Attack origin: Eastern European IP cluster — matches prior ATO ring pattern
+  - Total funds received by MULE-ACC-8821 from all 7 victims: estimated £23,400 this month
+artifact: table | Mule Network Analysis | id:tbl-df-003
+  Mule Account: MULE-ACC-8821
+  Linked ATO Victims: 7 (including Daniel Frost)
+  Total Received This Month: ~£23,400
+  Attack Origin: Eastern European IP cluster
+  Method: Phishing → credential theft → device registration
+  Law Enforcement Status: Referral pending
+
+STEP 4 [hitl: APPROVE_RESTORE_DF]
+processing: Preparing emergency account restoration and fraud claim...
+done: Immediate action required — account locked, customer funds to be restored
+hitl: ATO confirmed. Customer disputed all transactions. Account drain + credit card abuse detected. How to proceed?
+options:
+  - Lock account, restore funds & file fraud claim | restore | signal:APPROVE_RESTORE_DF
+  - Lock account only — pending fraud investigation | lock | signal:LOCK_DF
+  - Escalate to Serious Fraud Unit | escalate | signal:ESCALATE_DF
+reasoning:
+  - (R) ATO confirmed — customer explicitly reported all transactions as fraudulent
+  - (R) Account credentials compromised — immediate password reset and device deregistration required
+  - (G) Customer is victim, not perpetrator — priority is account restoration and fraud claim
+  - Fraud claim covers: £1,800 + £1,850 (mule transfers) + £4,800 (card abuse) + £980 (ATM) = £9,430
+
+STEP 5 [2s]
+processing: Locking account, resetting credentials and initiating fraud claim...
+done: Account secured — all compromised credentials reset, fraud claim initiated
+reasoning:
+  - Account locked and all active sessions terminated immediately
+  - All 3 unregistered device IDs removed from account
+  - Password and MFA credentials reset — new credentials issued via verified channel
+  - Fraud claim initiated: £9,430 total claim across account and credit card
+  - MULE-ACC-8821 flagged for law enforcement — all 7 linked victims identified
+artifact: table | Action Summary | id:tbl-df-004
+  Account Status: Locked — credentials reset
+  Fraud Claim: £9,430 initiated
+  Devices Removed: 3 unregistered device IDs
+  Mule Referral: MULE-ACC-8821 — law enforcement notified
+  Customer Contact: Verified channel — new credentials issued
+
+STEP 6 [final]
+processing: Closing ATO incident and completing fraud claim registration...
+done: Account restored — ATO contained, £9,430 fraud claim registered
+reasoning:
+  - Account CUST-67103-DF secured — Daniel Frost notified via verified telephone
+  - Fraud claim £9,430 registered — standard 5-business-day processing timeline
+  - MULE-ACC-8821 referred to Serious Fraud Office alongside 6 other linked victims
+  - ATO ring pattern forwarded to NCA Cybercrime Unit
+  - Customer outcome: Full restitution expected — bank liability confirmed under Payment Services Regulations 2017

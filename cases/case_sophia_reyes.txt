@@ -1,0 +1,103 @@
+CASE_ID: CUST-31042-SR
+CASE_NAME: Sophia Reyes — Mortgage Fraud & Money Laundering
+KEY_DETAILS:
+  Customer: Sophia Reyes
+  Account: ****4417
+  Employer: Self-employed — Property Consultant
+  Total Exposure: £320,000
+  Alert Type: Mortgage Fraud — Layering via Property
+  LRS Score: 778 / 1000
+  Pattern: AML — Placement & Layering
+
+STEP 1 [3s]
+processing: Ingesting customer profile and mortgage transaction history...
+done: Customer profile loaded — CUST-31042-SR, 276-day-old account
+reasoning:
+  - Account opened 2024-06-15. Self-employed property consultant — higher baseline risk
+  - Products: Current Account, £320K Mortgage, Savings Account — total exposure £320,000
+  - KYC score 88 — passed, but self-employment income harder to verify
+  - LRS trajectory: 98 → 778 over 21 months — sustained escalation pattern
+artifact: table | Customer Profile | id:tbl-sr-001
+  Name: Sophia Reyes
+  Account: ****4417
+  Onboarded: 2024-06-15
+  KYC Score: 88 — PASS
+  Employer: Self-employed — Property Consultant
+  Total Exposure: £320,000
+  LRS Score: 778 / 1000
+artifact: pdf | Customer Risk Profile | id:pdf-sr-001 | path:/files/CUST-31042-SR_customer_profile.pdf
+
+STEP 2 [4s]
+processing: Running AML pattern analysis — placement and layering detection...
+done: AML layering pattern confirmed — offshore funds routed via mortgage overpayment
+reasoning:
+  - (R) Cash deposits totalling £30,800 in 30 days — no source of funds declared
+  - (R) Mortgage overpayments 3–4x normal rate — atypical for stated income
+  - (R) Transfer in from OFFSHORE-LLC-44 (x2) — unverified offshore entity
+  - (R) Property Purchase Fee — third property transaction this quarter
+  - (R) Source of funds request declined twice — cited 'accountant busy'
+  - (G) No velocity spike, channel shift, or device anomaly
+  - Classic AML placement → layering pattern: cash in → offshore in → mortgage overpayment
+artifact: table | AML Indicators | id:tbl-sr-002
+  Pattern: Placement + Layering
+  Cash Deposits (30d): £30,800 (no source declared)
+  Offshore Transfers In: £23,700 from OFFSHORE-LLC-44
+  Mortgage Overpayments: £40,000 in 30 days (norm: ~£3,000)
+  Document Refusals: 2 source-of-funds requests declined
+
+STEP 3 [3s]
+processing: Tracing offshore counterparty OFFSHORE-LLC-44...
+done: Offshore entity identified — jurisdiction: Cayman Islands, no identifiable operations
+reasoning:
+  - OFFSHORE-LLC-44 registered in Cayman Islands — incorporation date unknown
+  - No identifiable business operations or web presence
+  - Same entity sent funds twice: £9,500 (Feb 18) and £14,200 (Mar 1) — total £23,700
+  - Beneficial ownership structure opaque — nominee directors
+  - Cross-referenced against OFAC/HMT sanctions lists — no direct match, but proximity flag
+artifact: table | Counterparty Analysis | id:tbl-sr-003
+  Entity: OFFSHORE-LLC-44
+  Jurisdiction: Cayman Islands
+  Incorporation: Unknown
+  Operations: None identified
+  Total Transferred: £23,700
+  Sanctions Match: No direct match — proximity flag
+  Beneficial Owner: Undisclosed nominee structure
+
+STEP 4 [hitl: APPROVE_SAR_SR]
+processing: Preparing SAR recommendation and mortgage freeze options...
+done: AML review required — suspected mortgage laundering, £320K exposure
+hitl: Layering pattern confirmed via offshore entity + mortgage overpayment. What action?
+options:
+  - File SAR & restrict mortgage drawdown | sar | signal:APPROVE_SAR_SR
+  - Issue enhanced due diligence request | edd | signal:EDD_SR
+  - Escalate to MLRO for decision | mlro | signal:ESCALATE_SR
+reasoning:
+  - (R) Classic AML trilogy: unexplained cash in → offshore layering → property integration
+  - (R) £320K mortgage used as integration vehicle — potential proceeds of crime
+  - (R) Two source-of-funds refusals — deliberate document avoidance
+  - MLRO escalation recommended given exposure size and mortgage product involvement
+
+STEP 5 [2s]
+processing: Logging enhanced due diligence and filing SAR...
+done: SAR filed — mortgage drawdown restricted pending investigation
+reasoning:
+  - SAR submitted to National Crime Agency under POCA 2002 s.330
+  - Mortgage drawdown restricted — Sophia Reyes cannot access additional funds
+  - Enhanced Due Diligence (EDD) review initiated — 30-day window
+  - Customer contact suspended — tipping off restriction applied
+  - OFAC/HMT re-screening scheduled for all connected accounts
+artifact: table | Action Summary | id:tbl-sr-004
+  SAR Reference: SAR-2026-03-0778
+  Mortgage Status: Drawdown Restricted
+  EDD Review: Initiated — 30-day window
+  Investigating Officer: FinCrime Team Beta
+  Tipping Off Restriction: Applied
+
+STEP 6 [final]
+processing: Closing investigation record...
+done: Investigation complete — SAR filed, mortgage restricted
+reasoning:
+  - SAR SAR-2026-03-0778 submitted to NCA
+  - Mortgage drawdown restricted — £320K exposure protected
+  - EDD review will determine if account should be closed
+  - Case referred to MLRO for ongoing monitoring

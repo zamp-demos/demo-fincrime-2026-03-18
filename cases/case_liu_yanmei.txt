@@ -1,0 +1,103 @@
+CASE_ID: CUST-58234-LY
+CASE_NAME: Liu Yanmei — Trade Finance Fraud
+KEY_DETAILS:
+  Customer: Liu Yanmei
+  Account: ****2281
+  Employer: Sino-Pacific Trade Solutions Ltd
+  Total Exposure: £500,000
+  Alert Type: Trade Finance Fraud — Duplicate Invoices + BVI Shell
+  LRS Score: 830 / 1000
+  Facility Drawn: £350,000 of £500,000 (70%)
+
+STEP 1 [3s]
+processing: Ingesting business customer profile and trade finance history...
+done: Customer profile loaded — CUST-58234-LY, 229-day-old business account
+reasoning:
+  - Account opened 2025-08-01. Business account — trade finance facility £500,000
+  - Products: Business Current Account, Trade Finance Facility £500K, FX Account
+  - KYC score 82 — passed, but trade finance is inherently higher risk
+  - LRS trajectory: 143 → 830 over 7 months — rapid escalation, invoice anomalies detected
+artifact: table | Customer Profile | id:tbl-ly-001
+  Name: Liu Yanmei
+  Account: ****2281
+  Onboarded: 2025-08-01
+  KYC Score: 82 — PASS
+  Employer: Sino-Pacific Trade Solutions Ltd
+  Total Exposure: £500,000 facility
+  LRS Score: 830 / 1000
+artifact: pdf | Customer Risk Profile | id:pdf-ly-001 | path:/files/CUST-58234-LY_customer_profile.pdf
+
+STEP 2 [5s]
+processing: Running invoice deduplication and trade finance anomaly detection...
+done: 3 duplicate invoice variants confirmed — £255,000 in fraudulent drawdowns identified
+reasoning:
+  - (R) Invoice #TF-4412 submitted twice: Feb 10 (£85K) and Feb 15 (£92K) — same goods, different amounts
+  - (R) Invoice #TF-4489: same HS code as TF-4412 — goods description duplicated
+  - (R) Invoice #TF-4501: third variant of TF-4412 — submitted Mar 8
+  - (R) Every drawdown immediately converted to FX and transferred offshore within 48 hours
+  - (R) Beneficiaries: SINO-PAC-HK, SINO-PAC-SG, PACIFIC-SHELL-BVI — all linked to same ownership chain
+  - (R) PACIFIC-SHELL-BVI: BVI company, no identifiable operations, OFAC proximity flag
+artifact: table | Invoice Analysis | id:tbl-ly-002
+  Duplicate Invoices: 3 variants of TF-4412
+  Total Fraudulent Drawdowns: £255,000 est.
+  Facility Remaining: £150,000 at risk
+  Invoice Verification Request: 14 days outstanding — no response
+  FX Conversion Time: Average 34 hours post-drawdown
+
+STEP 3 [4s]
+processing: Tracing offshore beneficiary chain — BVI shell company analysis...
+done: Beneficial ownership confirmed — HK, SG, BVI entities share same owner
+reasoning:
+  - SINO-PAC-HK: Hong Kong entity — nominee director structure, no identified operations
+  - SINO-PAC-SG: Singapore entity — registered same day as SINO-PAC-HK, same nominee directors
+  - PACIFIC-SHELL-BVI: British Virgin Islands — no operations, OFAC proximity (not direct match)
+  - All three entities: same beneficial owner profile via offshore nominee structure
+  - Total transferred offshore: £346,800 (drawdowns £350K less conversion fees)
+  - Pattern: Trade finance draw → immediate FX → offshore shell → ultimate beneficiary unknown
+artifact: table | Shell Company Network | id:tbl-ly-003
+  SINO-PAC-HK: Hong Kong — nominee structure
+  SINO-PAC-SG: Singapore — same nominees as HK entity
+  PACIFIC-SHELL-BVI: BVI — OFAC proximity flag
+  Common Beneficial Owner: Yes — identity unconfirmed
+  Total Offshore Transfer: £346,800
+  OFAC Status: Proximity flag — not direct match
+
+STEP 4 [hitl: APPROVE_BLOCK_LY]
+processing: Preparing fraud recommendation — facility suspension and SAR filing...
+done: Fraud review required — £500K facility at risk, BVI shell confirmed
+hitl: Duplicate invoices + BVI shell network confirmed. £150K facility still available. What action?
+options:
+  - Suspend facility & file SAR immediately | suspend | signal:APPROVE_BLOCK_LY
+  - Freeze pending invoice verification (14d) | verify | signal:VERIFY_LY
+  - Escalate to Trade Finance Fraud Unit | escalate | signal:ESCALATE_LY
+reasoning:
+  - (R) Three confirmed duplicate invoice variants — fraud beyond reasonable doubt
+  - (R) £150K remaining facility still available — immediate suspension recommended
+  - (R) OFAC proximity flag on PACIFIC-SHELL-BVI — potential sanctions exposure
+  - SAR + OFAC notification required — potential sanctions violation via BVI entity
+
+STEP 5 [2s]
+processing: Suspending trade finance facility and filing SAR...
+done: Facility suspended — SAR and OFAC notification filed
+reasoning:
+  - Trade finance facility SUSPENDED immediately — £150K remaining drawdown blocked
+  - SAR submitted to NCA under POCA 2002 s.330
+  - OFAC notification filed — BVI proximity flag escalated for sanctions review
+  - Sino-Pacific Trade Solutions Ltd account restricted — no new transactions
+  - Invoice #TF-4412 fraud evidence package prepared for law enforcement
+artifact: table | Action Summary | id:tbl-ly-004
+  SAR Reference: SAR-2026-03-0830
+  Facility Status: SUSPENDED
+  Amount Protected: £150,000 remaining drawdown
+  OFAC Notification: Filed — BVI proximity
+  Investigation Unit: Trade Finance Fraud Team
+
+STEP 6 [final]
+processing: Closing investigation record...
+done: Investigation complete — facility suspended, SAR and OFAC notification filed
+reasoning:
+  - Trade finance facility suspended — £150K protected from further fraudulent drawdown
+  - SAR SAR-2026-03-0830 submitted to NCA
+  - OFAC notified of BVI proximity — sanctions review in progress
+  - Total fraudulent drawdowns identified: ~£255,000
+  - Law enforcement referral package prepared

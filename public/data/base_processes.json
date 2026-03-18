@@ -1,0 +1,67 @@
+[
+  {
+    "id": "CUST-20847-JO",
+    "name": "James Okafor — Silent Exit Detection",
+    "category": "Financial Crime Detection",
+    "stockId": "CUST-20847-JO",
+    "year": "2026-03-18",
+    "status": "In Progress",
+    "currentStatus": "Awaiting simulation...",
+    "alertType": "Silent Exit — 9 Markers Active",
+    "exposure": "£53,000",
+    "lrsScore": "847",
+    "daysToExit": "~14 days"
+  },
+  {
+    "id": "CUST-31042-SR",
+    "name": "Sophia Reyes — Mortgage Fraud & Money Laundering",
+    "category": "Financial Crime Detection",
+    "stockId": "CUST-31042-SR",
+    "year": "2026-03-18",
+    "status": "In Progress",
+    "currentStatus": "Awaiting simulation...",
+    "alertType": "Mortgage Fraud — AML Layering",
+    "exposure": "£320,000",
+    "lrsScore": "778",
+    "daysToExit": "N/A"
+  },
+  {
+    "id": "CUST-44891-MW",
+    "name": "Marcus Webb — Insider Trading Detection",
+    "category": "Financial Crime Detection",
+    "stockId": "CUST-44891-MW",
+    "year": "2026-03-18",
+    "status": "In Progress",
+    "currentStatus": "Awaiting simulation...",
+    "alertType": "MAR Breach — Insider Dealing",
+    "exposure": "£890,000",
+    "lrsScore": "743",
+    "daysToExit": "N/A"
+  },
+  {
+    "id": "CUST-58234-LY",
+    "name": "Liu Yanmei — Trade Finance Fraud",
+    "category": "Financial Crime Detection",
+    "stockId": "CUST-58234-LY",
+    "year": "2026-03-18",
+    "status": "In Progress",
+    "currentStatus": "Awaiting simulation...",
+    "alertType": "Trade Finance Fraud — Duplicate Invoices",
+    "exposure": "£500,000",
+    "lrsScore": "830",
+    "daysToExit": "~14 days"
+  },
+  {
+    "id": "CUST-67103-DF",
+    "name": "Daniel Frost — Account Takeover",
+    "category": "Financial Crime Detection",
+    "stockId": "CUST-67103-DF",
+    "year": "2026-03-18",
+    "status": "In Progress",
+    "currentStatus": "Awaiting simulation...",
+    "alertType": "ATO — In Active Execution",
+    "exposure": "£7,000",
+    "lrsScore": "691",
+    "daysToExit": "0 — ATO in progress"
+  }
+]
