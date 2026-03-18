@@ -5,8 +5,8 @@ export default defineConfig({
   assetsInclude: ['**/*.md'],
   plugins: [react()],
   build: {
-    outDir: 'public',
-    emptyOutDir: false,
+    outDir: 'dist',
+    emptyOutDir: true,
   },
   server: {
     port: 5173,
