@@ -1,3 +1,4 @@
+import API_BASE from '../config.js';
 import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -40,7 +41,7 @@ const DashboardLayout = () => {
     useEffect(() => {
         const loadQueueCount = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+                const API_URL = API_BASE;
                 const response = await fetch(`${API_URL}/api/feedback/queue`);
                 if (response.ok) {
                     const data = await response.json();
@@ -338,7 +339,7 @@ const DashboardLayout = () => {
                         <button
                             onClick={async () => {
                                 try {
-                                    await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/reset`);
+                                    await fetch(`${API_BASE}/reset`);
                                 } catch (err) {
                                     console.error('Failed to reset backend:', err);
                                 }
