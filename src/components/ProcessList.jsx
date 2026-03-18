@@ -1,3 +1,4 @@
+import API_BASE from '../config.js';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Filter, Check, Loader2, Search, SlidersHorizontal, Activity } from 'lucide-react';
@@ -10,7 +11,7 @@ const ProcessList = ({ category = 'Data Integrity Review' }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/data/processes.json`);
+                const response = await fetch(`${API_BASE}/data/processes.json`);
                 if (response.ok) {
                     const data = await response.json();
                     const filtered = data
